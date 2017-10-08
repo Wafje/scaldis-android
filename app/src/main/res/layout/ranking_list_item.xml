@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="16dp">
+
+    <TextView
+        android:id="@+id/rank"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/category_circle"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="24dp"
+        android:text="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textSize="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        tools:text="Jeugdbasket Zwevegem Scaldis HSE 1"
+        app:layout_constraintLeft_toRightOf="@+id/rank"
+        app:layout_constraintTop_toTopOf="@+id/rank"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        tools:text="12P"
+        app:layout_constraintBottom_toBottomOf="@+id/rank"
+        app:layout_constraintLeft_toLeftOf="@+id/name" />
+
+    <View
+        android:id="@+id/divider_score"
+        android:layout_width="1dp"
+        android:layout_height="16dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rank"
+        app:layout_constraintLeft_toRightOf="@+id/score"/>
+
+    <TextView
+        android:id="@+id/games"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        tools:text="4W 0D 0L"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rank"
+        app:layout_constraintLeft_toRightOf="@+id/divider_score"
+        android:layout_marginStart="8dp" />
+
+    <View
+        android:id="@+id/divider_games"
+        android:layout_width="1dp"
+        android:layout_height="16dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rank"
+        app:layout_constraintLeft_toRightOf="@+id/games"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        tools:text="245 - 198"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rank"
+        app:layout_constraintLeft_toRightOf="@+id/divider_games"
+        android:layout_marginStart="8dp" />
+
+
+
+</android.support.constraint.ConstraintLayout>
