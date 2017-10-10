@@ -3,6 +3,7 @@ package com.housesnow.scaldis.detail;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -14,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.housesnow.scaldis.R;
 import com.housesnow.scaldis.objects.Match;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 
 public class MatchesFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<List<Match>>, MatchesAdapter.MatchesAdapterDateOnClickHandler {
+        implements LoaderManager.LoaderCallbacks<List<Match>>, MatchesAdapter.MatchesAdapterOnClickHandler {
 
     MatchesAdapter adapter;
     LinearLayoutManager layoutManager;
@@ -120,7 +120,13 @@ public class MatchesFragment extends Fragment
     }
 
     @Override
-    public void onClick(String text) {
-
+    public void onClick(MatchesAdapter.MatchesAdapterClickType type, String data) {
+        switch (type) {
+            case MAPS:
+                Uri mapsUri = Uri.parse("geo:0,0?q=" + data);
+                break;
+            case DATE:
+                break;
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.housesnow.scaldis.R;
 import com.housesnow.scaldis.objects.Match;
@@ -23,11 +22,11 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
     public static final int VIEW_TYPE_PLAYED = 0;
     public static final int VIEW_TYPE_UNPLAYED = 1;
 
-    private final MatchesAdapterDateOnClickHandler clickHandler;
+    private final MatchesAdapterOnClickHandler clickHandler;
 
     private List<Match> matches;
 
-    public MatchesAdapter(MatchesAdapterDateOnClickHandler clickHandler) {
+    public MatchesAdapter(MatchesAdapterOnClickHandler clickHandler) {
         this.clickHandler = clickHandler;
     }
 
@@ -58,7 +57,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
     }
 
     @Override
-    public void onBindViewHolder(MatchesAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(MatchesAdapterViewHolder holder, final int position) {
 
         int viewType = getItemViewType(position);
 
@@ -78,14 +77,14 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
                 holder.mapsIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickHandler.onClick("maps");
+                        clickHandler.onClick(MatchesAdapterClickType.MAPS, "");
                     }
                 });
 
                 holder.dateIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickHandler.onClick("date");
+                        clickHandler.onClick(MatchesAdapterClickType.DATE, "");
                     }
                 });
                 break;
@@ -160,7 +159,12 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
         }
     }
 
-    public interface MatchesAdapterDateOnClickHandler {
-        void onClick(String text);
+    public interface MatchesAdapterOnClickHandler {
+        void onClick(MatchesAdapterClickType type, String data);
+    }
+
+    public enum MatchesAdapterClickType {
+        DATE,
+        MAPS
     }
 }

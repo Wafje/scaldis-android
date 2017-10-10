@@ -1,5 +1,7 @@
 package com.housesnow.scaldis.detail;
 
+import android.content.Context;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 
 import com.housesnow.scaldis.R;
 import com.housesnow.scaldis.objects.PouleTeam;
+import com.housesnow.scaldis.objects.Team;
 
 import java.util.List;
 
@@ -21,8 +24,14 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
     private static final int VIEW_TYPE_LARGE = 1;
     private static final int VIEW_TYPE_TITLE = 2;
 
-    private List<PouleTeam> teams;
+    private Team team;
     private int selectedPosition = -1;
+
+    private Context context;
+
+    public RankingAdapter(Context context) {
+        this.context = context;
+    }
 
     @Override
     public RankingAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,8 +56,8 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
         return new RankingAdapterViewHolder(view);
     }
 
-    public void setRankingData(List<PouleTeam> teams) {
-        this.teams = teams;
+    public void setTeamData(Team team) {
+        this.team = team;
         notifyDataSetChanged();
     }
 
@@ -57,28 +66,32 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
 
         int viewType = getItemViewType(position);
 
-        holder.rankView.setText(teams.get(position).getRank().toString());
-        holder.nameView.setText(teams.get(position).getName());
+        holder.rankView.setText(team.getPoules().get(0).getTeams().get(position).getRank().toString());
+        holder.nameView.setText(team.getPoules().get(0).getTeams().get(position).getName());
+
+        if (team.getGuid().equals(team.getPoules().get(0).getTeams().get(position).getGuid())) {
+            holder.view.setBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.colorPrimaryLight, null));
+        }
 
 
         switch (viewType) {
             case VIEW_TYPE_SMALL:
-                String score = teams.get(position).getNumberOfPoints() + "P";
-                String games = teams.get(position).getGamesWon() + "W " + teams.get(position).getGamesDraw() + "D " + teams.get(position).getGamesLost() + "L";
-                String points = teams.get(position).getPointsScored() + " - " + teams.get(position).getPointsAgainst();
+                String score = team.getPoules().get(0).getTeams().get(position).getNumberOfPoints() + "P";
+                String games = team.getPoules().get(0).getTeams().get(position).getGamesWon() + "W " + team.getPoules().get(0).getTeams().get(position).getGamesDraw() + "D " + team.getPoules().get(0).getTeams().get(position).getGamesLost() + "L";
+                String points = team.getPoules().get(0).getTeams().get(position).getPointsScored() + " - " + team.getPoules().get(0).getTeams().get(position).getPointsAgainst();
 
                 holder.scoreView.setText(score);
                 holder.gamesView.setText(games);
                 holder.pointsView.setText(points);
                 break;
             case VIEW_TYPE_LARGE:
-                holder.scoreView.setText(teams.get(position).getNumberOfPoints().toString());
-                holder.gamesView.setText(teams.get(position).getNumberOfGames().toString());
-                holder.winsView.setText(teams.get(position).getGamesWon().toString());
-                holder.drawsView.setText(teams.get(position).getGamesDraw().toString());
-                holder.lossesView.setText(teams.get(position).getGamesLost().toString());
-                holder.scoredView.setText(teams.get(position).getPointsScored().toString());
-                holder.againstView.setText(teams.get(position).getPointsAgainst().toString());
+                holder.scoreView.setText(team.getPoules().get(0).getTeams().get(position).getNumberOfPoints().toString());
+                holder.gamesView.setText(team.getPoules().get(0).getTeams().get(position).getNumberOfGames().toString());
+                holder.winsView.setText(team.getPoules().get(0).getTeams().get(position).getGamesWon().toString());
+                holder.drawsView.setText(team.getPoules().get(0).getTeams().get(position).getGamesDraw().toString());
+                holder.lossesView.setText(team.getPoules().get(0).getTeams().get(position).getGamesLost().toString());
+                holder.scoredView.setText(team.getPoules().get(0).getTeams().get(position).getPointsScored().toString());
+                holder.againstView.setText(team.getPoules().get(0).getTeams().get(position).getPointsAgainst().toString());
                 break;
         }
     }
@@ -108,10 +121,10 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
      */
     @Override
     public int getItemCount() {
-        if (teams == null) {
+        if (team == null) {
             return 0;
         }
-        return teams.size();
+        return team.getPoules().get(0).getTeams().size();
     }
 
     /**
@@ -133,6 +146,8 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
         final TextView scoredView;
         final TextView againstView;
 
+        final View view;
+
         public RankingAdapterViewHolder(View view) {
             super(view);
 
@@ -148,6 +163,8 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
             lossesView = (TextView) view.findViewById(R.id.losses);
             scoredView = (TextView) view.findViewById(R.id.scored);
             againstView = (TextView) view.findViewById(R.id.against);
+
+            this.view = view;
 
             view.setOnClickListener(this);
         }

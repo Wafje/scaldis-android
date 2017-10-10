@@ -14,12 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.housesnow.scaldis.R;
+import com.housesnow.scaldis.objects.Match;
 import com.housesnow.scaldis.objects.Poule;
 import com.housesnow.scaldis.objects.PouleTeam;
 import com.housesnow.scaldis.objects.Team;
 import com.housesnow.scaldis.utilities.NetworkUtils;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,7 +59,7 @@ public class RankingFragment extends Fragment
         /* setLayoutManager associates the LayoutManager we created above with our RecyclerView */
         rankingRecyclerView.setLayoutManager(layoutManager);
 
-        adapter = new RankingAdapter();
+        adapter = new RankingAdapter(getContext());
         rankingRecyclerView.setAdapter(adapter);
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
@@ -90,16 +92,16 @@ public class RankingFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<List<Poule>> loader, List<Poule> poules) {
-        adapter.setRankingData(Collections.<PouleTeam>emptyList());
+        adapter.setTeamData(new Team(teamName,teamGuid));
 
         if (poules != null) {
-            adapter.setRankingData(poules.get(0).getTeams());
+            adapter.setTeamData(new Team(teamName,teamGuid, new ArrayList<Match>(), poules));
         }
     }
 
 
     @Override
     public void onLoaderReset(Loader<List<Poule>> loader) {
-        adapter.setRankingData(Collections.<PouleTeam>emptyList());
+        adapter.setTeamData(new Team(teamName,teamGuid));
     }
 }

@@ -1,5 +1,6 @@
 package com.housesnow.scaldis.objects;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +18,8 @@ public class Team implements Comparable<Team> {
     private String subcategory = "";
     private Integer age = 0;
 
-    private List<Match> matches;
-    private List<Poule> poules;
+    private List<Match> matches = new ArrayList<>();
+    private List<Poule> poules = new ArrayList<>();
 
     public Team() {}
 
