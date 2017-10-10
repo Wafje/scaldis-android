@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_marginTop="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="16dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/rank"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/category_circle"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="24dp"
+        android:text="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textSize="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        tools:text="Jeugdbasket Zwevegem Scaldis HSE 1"
+        app:layout_constraintLeft_toRightOf="@+id/rank"
+        app:layout_constraintTop_toTopOf="@+id/rank"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintLeft_toLeftOf="@+id/name">
+
+
+        <TextView
+            android:id="@+id/text_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Points" />
+
+        <TextView
+            android:id="@+id/text_games"
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Games" />
+
+        <TextView
+            android:id="@+id/text_wins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wins" />
+        <TextView
+            android:id="@+id/text_draws"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Draws" />
+
+        <TextView
+            android:id="@+id/text_losses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Losses" />
+
+        <TextView
+            android:id="@+id/text_scored"
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scored" />
+
+        <TextView
+            android:id="@+id/text_against"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Against" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/numbers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="48dp"
+        app:layout_constraintTop_toTopOf="@+id/text"
+        app:layout_constraintLeft_toRightOf="@+id/text"
+        android:gravity="end">
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="12" />
+
+        <TextView
+            android:id="@+id/games"
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4" />
+        <TextView
+            android:id="@+id/wins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4" />
+        <TextView
+            android:id="@+id/draws"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4" />
+        <TextView
+            android:id="@+id/losses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4" />
+        <TextView
+            android:id="@+id/scored"
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4" />
+        <TextView
+            android:id="@+id/against"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4" />
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

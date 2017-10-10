@@ -268,7 +268,7 @@ public final class QueryUtils {
         try {
             return Integer.valueOf(string.trim());
         } catch (NumberFormatException e) {
-            return null;
+            return 0;
         }
     }
 

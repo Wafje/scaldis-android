@@ -8,6 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -24,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class TeamOverviewActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Team>> {
+        implements LoaderManager.LoaderCallbacks<List<Team>>, TeamOverviewAdapter.ListItemClickListener {
 
     private static final String SCALDIS_GUID = "BVBL1413";
 
@@ -35,10 +38,10 @@ public class TeamOverviewActivity extends AppCompatActivity
     private static final int TEAMS_LOADER_ID = 1;
 
     /** Adapter for the list of teams */
-    private TeamOverviewAdapter mAdapter;
+    private TeamOverviewAdapter adapter;
 
-    /** TextView that is displayed when the list is empty */
-    private TextView mEmptyStateTextView;
+    private List<Team> teams;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,31 +49,16 @@ public class TeamOverviewActivity extends AppCompatActivity
         setContentView(R.layout.activity_team_overview);
 
         // Find a reference to the {@link ListView} in the layout
-        ListView teamsListView = (ListView) findViewById(R.id.list);
+        RecyclerView overviewRecyclerView = (RecyclerView) findViewById(R.id.list);
 
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
-        teamsListView.setEmptyView(mEmptyStateTextView);
+        GridLayoutManager layoutManager =
+                new GridLayoutManager(this, 2);
+
+        overviewRecyclerView.setLayoutManager(layoutManager);
 
         // Create a new adapter that takes an empty list of teams as input
-        mAdapter = new TeamOverviewAdapter(this, new ArrayList<Team>(), SCALDIS_GUID);
-
-        // Set the adapter on the {@link ListView}
-        // so the list can be populated in the user interface
-        teamsListView.setAdapter(mAdapter);
-
-        teamsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Team team = (Team) parent.getItemAtPosition(position);
-
-                Intent teamDetailIntent = new Intent(TeamOverviewActivity.this, TeamDetailActivity.class);
-                teamDetailIntent.putExtra("teamGuid", team.getGuid());
-                teamDetailIntent.putExtra("teamName", team.getName());
-                teamDetailIntent.putExtra("teamTitle", team.getCategory().replaceFirst("\\D\\d{2}\\s*",""));
-                startActivity(teamDetailIntent);
-            }
-        });
-
+        adapter = new TeamOverviewAdapter(this);
+        overviewRecyclerView.setAdapter(adapter);
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -88,14 +76,6 @@ public class TeamOverviewActivity extends AppCompatActivity
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
             loaderManager.initLoader(TEAMS_LOADER_ID, null, this);
-        } else {
-            // Otherwise, display error
-            // First, hide loading indicator so error message will be visible
-            View loadingIndicator = findViewById(R.id.loading_indicator);
-            loadingIndicator.setVisibility(View.GONE);
-
-            // Update empty state with no connection error message
-            mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
     }
 
@@ -108,27 +88,32 @@ public class TeamOverviewActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<List<Team>> loader, List<Team> teams) {
-        // Hide loading indicator because the data has been loaded
-        View loadingIndicator = findViewById(R.id.loading_indicator);
-        loadingIndicator.setVisibility(View.GONE);
-
-        // Set empty state text to display "No teams found."
-        mEmptyStateTextView.setText(R.string.no_teams);
-
         // Clear the adapter of previous earthquake data
-        mAdapter.clear();
+        adapter.setTeamData(Collections.<Team>emptyList());
+
+        this.teams = teams;
 
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
-        if (teams != null && !teams.isEmpty()) {
+        if (teams != null) {
             Collections.sort(teams);
-            mAdapter.addAll(teams);
+            adapter.setTeamData(teams);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<List<Team>> loader) {
         // Loader reset, so we can clear out our existing data.
-        mAdapter.clear();
+        adapter.setTeamData(Collections.<Team>emptyList());
+    }
+
+    @Override
+    public void onListItemClick(Team clickedTeam) {
+        Intent teamDetailIntent = new Intent(TeamOverviewActivity.this, TeamDetailActivity.class);
+
+        teamDetailIntent.putExtra("teamGuid", clickedTeam.getGuid());
+        teamDetailIntent.putExtra("teamName", clickedTeam.getName());
+        teamDetailIntent.putExtra("teamTitle", clickedTeam.getCategory() + " " + clickedTeam.getSubcategory());
+        startActivity(teamDetailIntent);
     }
 }

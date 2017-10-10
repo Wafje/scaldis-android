@@ -1,6 +1,7 @@
 package com.housesnow.scaldis.overview;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,45 +17,62 @@ import java.util.List;
  * Created by Sander on 1-10-2017.
  */
 
-public class TeamOverviewAdapter extends ArrayAdapter<Team> {
+public class TeamOverviewAdapter extends RecyclerView.Adapter<TeamOverviewAdapter.OverViewAdapterViewHolder> {
 
-    private String orgGuid;
+    private List<Team> teams;
 
-    public TeamOverviewAdapter(Context context, List<Team> teams, String orgGuid) {
-        super(context, 0, teams);
-        this.orgGuid = orgGuid;
+    final private ListItemClickListener clickHandler;
+
+    public TeamOverviewAdapter(ListItemClickListener clickHandler) {
+        this.clickHandler = clickHandler;
+    }
+
+    /**
+    * The interface that receives onClick messages.
+    */
+    public interface ListItemClickListener {
+        void onListItemClick(Team clickedTeam);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        /** Check if there is an existing list item view (called convertView) that we can reuse,
-         otherwise, if convertView is null, then inflate a new list item layout. */
-        View listItemView = convertView;
-        if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.team_list_item, parent, false);
+    public OverViewAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.team_overview_list_item, viewGroup, false);
+        return new OverViewAdapterViewHolder(view);
+    }
+
+    public void setTeamData(List<Team> teams) {
+        this.teams = teams;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBindViewHolder(OverViewAdapterViewHolder holder, int position) {
+        holder.categoryView.setText(teams.get(position).getCategory() + " " + teams.get(position).getSubcategory());
+    }
+
+    @Override
+    public int getItemCount() {
+        if (teams == null) {
+            return 0;
+        }
+        return teams.size();
+    }
+
+    public class OverViewAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        final TextView categoryView;
+
+        public OverViewAdapterViewHolder(View itemView) {
+            super(itemView);
+
+            categoryView = (TextView) itemView.findViewById(R.id.category);
+            itemView.setOnClickListener(this);
         }
 
-        Team currentTeam = getItem(position);
-
-        TextView nameView = (TextView) listItemView.findViewById(R.id.name);
-        TextView categoryView = (TextView) listItemView.findViewById(R.id.category);
-        TextView subcategoryView = (TextView) listItemView.findViewById(R.id.subcategory);
-
-        nameView.setText(currentTeam.getName());
-        categoryView.setText(currentTeam.getCategory());
-        subcategoryView.setText(currentTeam.getSubcategory());
-
-        return listItemView;
+        @Override
+        public void onClick(View v) {
+            clickHandler.onListItemClick(teams.get(getAdapterPosition()));
+        }
     }
 
-
-    private String parseName(String guid) {
-        guid = guid.replaceAll(orgGuid,"");
-        return guid.substring(0,guid.length() - 3);
-    }
-
-    private String parseCategory(String category) {
-        return category.replaceFirst("\\D\\d{2}\\s*","");
-    }
 }

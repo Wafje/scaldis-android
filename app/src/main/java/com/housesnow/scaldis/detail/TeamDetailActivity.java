@@ -135,21 +135,25 @@ public class TeamDetailActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0) {
+            Bundle bundle = new Bundle();
 
-                Bundle bundle = new Bundle();
+            bundle.putString("teamName", teamName);
+            bundle.putString("teamGuid", teamGuid);
 
-                bundle.putString("teamName", teamName);
-                bundle.putString("teamGuid", teamGuid);
+            switch (position) {
+                case 0:
+                    RankingFragment rankingFragment = new RankingFragment();
+                    rankingFragment.setArguments(bundle);
 
-                RankingFragment fragment = new RankingFragment();
-                fragment.setArguments(bundle);
+                    return rankingFragment;
+                case 1:
+                    MatchesFragment matchesFragment = new MatchesFragment();
+                    matchesFragment.setArguments(bundle);
 
-                return fragment;
+                    return matchesFragment;
+                default:
+                    return PlaceholderFragment.newInstance(position + 1);
             }
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override

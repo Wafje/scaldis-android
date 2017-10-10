@@ -1,12 +1,14 @@
 package com.housesnow.scaldis.objects;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
  * Created by Sander on 5-10-2017.
  */
 
-public class Match {
+public class Match implements Comparable<Match> {
     private Team homeTeam;
     private Team awayTeam;
     private Integer homeScore;
@@ -45,5 +47,10 @@ public class Match {
 
     public String getGuid() {
         return guid;
+    }
+
+    @Override
+    public int compareTo(@NonNull Match o) {
+        return getDatetime().compareTo(o.getDatetime());
     }
 }

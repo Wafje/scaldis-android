@@ -4,7 +4,11 @@ package com.housesnow.scaldis.objects;
  * Created by Sander on 8-10-2017.
  */
 
-public class PouleTeam extends Team {
+public class PouleTeam {
+
+    // General
+    private String name = "";
+    private String guid = "";
 
     private Integer rank = 0;
     private Integer numberOfGames = 0;
@@ -16,7 +20,8 @@ public class PouleTeam extends Team {
     private Integer gamesLost = 0;
 
     public PouleTeam(String name, String guid, Integer rank, Integer numberOfGames, Integer numberOfPoints, Integer pointsScored, Integer pointsAgainst, Integer gamesWon, Integer gamesDraw, Integer gamesLost) {
-        super(name, guid);
+        this.name = name;
+        this.guid = guid;
         this.rank = rank;
         this.numberOfGames = numberOfGames;
         this.numberOfPoints = numberOfPoints;
@@ -25,6 +30,14 @@ public class PouleTeam extends Team {
         this.gamesWon = gamesWon;
         this.gamesDraw = gamesDraw;
         this.gamesLost = gamesLost;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getGuid() {
+        return guid;
     }
 
     public Integer getRank() {
