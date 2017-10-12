@@ -34,6 +34,57 @@ public final class QueryUtils {
     /** Tag for the log messages */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
+    public static String fetchAddressFromMatchGuid(URL requestUrl) {
+        // Perform HTTP request to the URL and receive a JSON response back
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(requestUrl);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+
+        // Extract relevant fields from the JSON response
+        return extractAddressFromMatchJson(jsonResponse);
+    }
+
+    private static String extractAddressFromMatchJson(String matchJson) {
+        // If the JSON string is empty or null, then return early.
+        if (TextUtils.isEmpty(matchJson)) {
+            return null;
+        }
+
+        // Create empty arraylist
+        String address = "";
+
+        try {
+            // Create a JSONObject from the JSON response string
+            JSONObject baseJsonResponse = new JSONArray(matchJson).getJSONObject(0);
+
+            JSONObject addressJson = baseJsonResponse.getJSONObject("doc").getJSONObject("accommodatieDoc").getJSONObject("adres");
+
+            String street = addressJson.getString("straat");
+            if (street.equals("null"))
+                street = "";
+            String number = addressJson.getString("huisNr");
+            if (number.equals("null"))
+                number = "";
+            String city = addressJson.getString("plaats");
+            if (city.equals("null"))
+                city = "";
+
+            address = street + "+" + number + "+" + city;
+
+        } catch (JSONException e) {
+            // If an error is thrown when executing any of the above statements in the "try" block,
+            // catch the exception here, so the app doesn't crash. Print a log message
+            // with the message from the exception.
+            Log.e("QueryUtils", "Problem parsing the team JSON results", e);
+        }
+
+        // Return the list
+        return address;
+    }
+
 
     public static List<Team> fetchTeamFromOrganisation(URL requestUrl) {
         // Perform HTTP request to the URL and receive a JSON response back

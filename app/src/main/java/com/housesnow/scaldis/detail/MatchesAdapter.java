@@ -77,7 +77,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
                 holder.mapsIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickHandler.onClick(MatchesAdapterClickType.MAPS, "");
+                        clickHandler.onClick(MatchesAdapterClickType.MAPS, matches.get(position).getGuid());
                     }
                 });
 

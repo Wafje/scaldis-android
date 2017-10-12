@@ -21,6 +21,9 @@ public final class NetworkUtils {
 
     private static final String TEAM_MATCHES_URL =
             "http://vblcb.wisseq.eu/VBLCB_WebService/data/TeamMatchesByGuid";
+    
+    private static final String MATCH_DETAIL_URL =
+            "https://vblcb.wisseq.eu/VBLCB_WebService/data/MatchesByWedGuid";
 
     private static final String PARAM_ORG_GUID = "issguid";
 
@@ -54,9 +57,23 @@ public final class NetworkUtils {
         }
     }
 
-    public static URL getUrlMatchDetail(String guid) {
+    public static URL getUrlMatchesByGuid(String guid) {
         Uri uri = Uri.parse(TEAM_MATCHES_URL).buildUpon()
                 .appendQueryParameter(PARAM_TEAM_GUID, guid)
+                .build();
+
+        try {
+            URL url = new URL(URLDecoder.decode(uri.toString(), "UTF-8"));
+            return url;
+        } catch (MalformedURLException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static URL getUrlMatchDetail(String guid) {
+        Uri uri = Uri.parse(MATCH_DETAIL_URL).buildUpon()
+                .appendQueryParameter(PARAM_ORG_GUID, guid)
                 .build();
 
         try {

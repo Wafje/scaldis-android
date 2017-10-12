@@ -1,6 +1,7 @@
 package com.housesnow.scaldis.detail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import com.housesnow.scaldis.R;
 import com.housesnow.scaldis.objects.Match;
 import com.housesnow.scaldis.utilities.NetworkUtils;
+import com.housesnow.scaldis.utilities.QueryUtils;
 
 import java.net.URL;
 import java.util.Collections;
@@ -29,7 +31,7 @@ import java.util.List;
  */
 
 public class MatchesFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<List<Match>>, MatchesAdapter.MatchesAdapterOnClickHandler {
+        implements MatchesAdapter.MatchesAdapterOnClickHandler {
 
     MatchesAdapter adapter;
     LinearLayoutManager layoutManager;
@@ -38,6 +40,44 @@ public class MatchesFragment extends Fragment
     String teamGuid;
 
     private static final int MATCHES_LOADER_ID = 3;
+    private static final int ADDRESS_LOADER_ID = 4;
+
+    private LoaderManager.LoaderCallbacks<List<Match>> matchLoader = new LoaderManager.LoaderCallbacks<List<Match>>() {
+        @Override
+        public Loader<List<Match>> onCreateLoader(int id, Bundle args) {
+            URL requestMatchesUrl = NetworkUtils.getUrlMatchesByGuid(teamGuid);
+
+            return new MatchesLoader(getActivity(), requestMatchesUrl);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<List<Match>> loader, List<Match> matches) {
+            adapter.setMatchesData(Collections.<Match>emptyList());
+
+            if (matches != null) {
+                Collections.sort(matches);
+                adapter.setMatchesData(matches);
+
+                int i;
+
+                for (i = 0; i < matches.size(); i++) {
+                    if (adapter.getItemViewType(i) == adapter.VIEW_TYPE_UNPLAYED) {
+                        break;
+                    }
+                }
+
+                if (i > 0)
+                    layoutManager.scrollToPosition(i-1);
+                else
+                    layoutManager.scrollToPosition(i);
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<List<Match>> loader) {
+            adapter.setMatchesData(Collections.<Match>emptyList());
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +120,7 @@ public class MatchesFragment extends Fragment
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(MATCHES_LOADER_ID, null, this);
+            loaderManager.initLoader(MATCHES_LOADER_ID, null, matchLoader);
 
 
         }
@@ -88,43 +128,43 @@ public class MatchesFragment extends Fragment
     }
 
     @Override
-    public Loader<List<Match>> onCreateLoader(int id, Bundle args) {
-        URL requestMatchesUrl = NetworkUtils.getUrlMatchDetail(teamGuid);
-
-        return new MatchesLoader(getActivity(), requestMatchesUrl);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Match>> loader, List<Match> matches) {
-        adapter.setMatchesData(Collections.<Match>emptyList());
-
-        if (matches != null) {
-            Collections.sort(matches);
-            adapter.setMatchesData(matches);
-
-            int i;
-
-            for (i = 0; i < matches.size(); i++) {
-                if (adapter.getItemViewType(i) == adapter.VIEW_TYPE_UNPLAYED) {
-                    break;
-                }
-            }
-
-            layoutManager.scrollToPosition(i);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Match>> loader) {
-        adapter.setMatchesData(Collections.<Match>emptyList());
-    }
-
-    @Override
-    public void onClick(MatchesAdapter.MatchesAdapterClickType type, String data) {
+    public void onClick(MatchesAdapter.MatchesAdapterClickType type, final String matchGuid) {
         switch (type) {
             case MAPS:
-                Uri mapsUri = Uri.parse("geo:0,0?q=" + data);
+
+                LoaderManager.LoaderCallbacks<String> addressLoader = new LoaderManager.LoaderCallbacks<String>() {
+                    @Override
+                    public Loader<String> onCreateLoader(int id, Bundle args) {
+                        URL requestAddressUrl = NetworkUtils.getUrlMatchDetail(matchGuid);
+
+                        return new AddressLoader(getActivity(), requestAddressUrl);
+                    }
+
+                    @Override
+                    public void onLoadFinished(Loader<String> loader, String address) {
+                        Uri mapsUri = Uri.parse("geo:0,0?q=" + address);
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapsUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+
+                        LoaderManager loaderManager = getLoaderManager();
+                        loaderManager.destroyLoader(ADDRESS_LOADER_ID);
+                    }
+
+                    @Override
+                    public void onLoaderReset(Loader<String> loader) {
+                        System.console().flush();
+                    }
+                };
+
+                LoaderManager loaderManager = getLoaderManager();
+
+                // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+                // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+                // because this activity implements the LoaderCallbacks interface).
+                loaderManager.initLoader(ADDRESS_LOADER_ID, null, addressLoader);
                 break;
+
             case DATE:
                 break;
         }

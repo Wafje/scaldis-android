@@ -19,6 +19,11 @@ public class PouleTeam {
     private Integer gamesDraw = 0;
     private Integer gamesLost = 0;
 
+    public PouleTeam(String name, String guid){
+        this.name = name;
+        this.guid = guid;
+    }
+
     public PouleTeam(String name, String guid, Integer rank, Integer numberOfGames, Integer numberOfPoints, Integer pointsScored, Integer pointsAgainst, Integer gamesWon, Integer gamesDraw, Integer gamesLost) {
         this.name = name;
         this.guid = guid;
