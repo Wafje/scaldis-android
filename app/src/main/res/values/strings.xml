@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Scaldis</string>
+    <string name="app_name">Jeugdbasket Scaldis Zwevegem</string>
 
     <!-- Text to display in the list when there are no earthquakes [CHAR LIMIT=NONE] -->
     <string name="no_teams">No teams found.</string>

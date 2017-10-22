@@ -1,4 +1,4 @@
-package com.housesnow.scaldis.detail;
+package be.jbs.scaldis.detail.ranking;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,13 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.housesnow.scaldis.R;
-import com.housesnow.scaldis.objects.Poule;
-import com.housesnow.scaldis.objects.PouleTeam;
-import com.housesnow.scaldis.objects.Team;
+import be.jbs.scaldis.R;
+import be.jbs.scaldis.objects.Poule;
+import be.jbs.scaldis.objects.PouleTeam;
+import be.jbs.scaldis.objects.Team;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Sander on 7-10-2017.
@@ -24,13 +23,11 @@ import java.util.List;
 public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingAdapterViewHolder> {
 
     private static final int VIEW_TYPE_SMALL = 0;
-    private static final int VIEW_TYPE_LARGE = 1;
     private static final int VIEW_TYPE_TITLE = 2;
 
     private Team team;
     private ArrayList<Integer> viewTypes = new ArrayList<>();
     private ArrayList<PouleTeam> viewTeams = new ArrayList<>();
-    private int selectedPosition = -1;
 
     private Context context;
 
@@ -45,9 +42,6 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
         switch (viewType)  {
             case VIEW_TYPE_SMALL:
                 layoutId = R.layout.ranking_list_item;
-                break;
-            case VIEW_TYPE_LARGE:
-                layoutId = R.layout.ranking_list_item_large;
                 break;
             case VIEW_TYPE_TITLE:
                 layoutId = R.layout.ranking_list_item_title;
@@ -104,25 +98,6 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
                 holder.pointsView.setText(points);
                 break;
 
-            case VIEW_TYPE_LARGE:
-                holder.rankView.setText(viewTeams.get(position).getRank().toString());
-                holder.nameView.setText(viewTeams.get(position).getName());
-
-                if (team.getGuid().equals(viewTeams.get(position).getGuid())) {
-                    holder.view.setBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.colorPrimaryLight, null));
-                } else {
-                    holder.view.setBackgroundColor(Color.WHITE);
-                }
-
-                holder.scoreView.setText(viewTeams.get(position).getNumberOfPoints().toString());
-                holder.gamesView.setText(viewTeams.get(position).getNumberOfGames().toString());
-                holder.winsView.setText(viewTeams.get(position).getGamesWon().toString());
-                holder.drawsView.setText(viewTeams.get(position).getGamesDraw().toString());
-                holder.lossesView.setText(viewTeams.get(position).getGamesLost().toString());
-                holder.scoredView.setText(viewTeams.get(position).getPointsScored().toString());
-                holder.againstView.setText(viewTeams.get(position).getPointsAgainst().toString());
-                break;
-
             case VIEW_TYPE_TITLE:
                 holder.nameView.setText(viewTeams.get(position).getName());
         }
@@ -168,11 +143,6 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
 
         final TextView scoreView;
         final TextView gamesView;
-        final TextView winsView;
-        final TextView drawsView;
-        final TextView lossesView;
-        final TextView scoredView;
-        final TextView againstView;
 
         final View view;
 
@@ -186,28 +156,14 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingA
             gamesView = (TextView) view.findViewById(R.id.games);
             pointsView = (TextView) view.findViewById(R.id.points);
 
-            winsView = (TextView) view.findViewById(R.id.wins);
-            drawsView = (TextView) view.findViewById(R.id.draws);
-            lossesView = (TextView) view.findViewById(R.id.losses);
-            scoredView = (TextView) view.findViewById(R.id.scored);
-            againstView = (TextView) view.findViewById(R.id.against);
-
             this.view = view;
 
-            view.setOnClickListener(this);
+            // view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            int clickedPosition = getAdapterPosition();
 
-            if (selectedPosition == clickedPosition) {
-                selectedPosition = -1;
-            } else {
-                selectedPosition = clickedPosition;
-            }
-
-            notifyItemChanged(selectedPosition);
         }
     }
 }

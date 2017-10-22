@@ -1,15 +1,13 @@
-package com.housesnow.scaldis.overview;
+package be.jbs.scaldis.overview;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.housesnow.scaldis.R;
-import com.housesnow.scaldis.objects.Team;
+import be.jbs.scaldis.R;
+import be.jbs.scaldis.objects.Team;
 
 import java.util.List;
 

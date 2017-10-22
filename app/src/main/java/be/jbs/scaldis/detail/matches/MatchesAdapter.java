@@ -1,4 +1,4 @@
-package com.housesnow.scaldis.detail;
+package be.jbs.scaldis.detail.matches;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.housesnow.scaldis.R;
-import com.housesnow.scaldis.objects.Match;
+import be.jbs.scaldis.R;
+import be.jbs.scaldis.objects.Match;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +25,8 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
     private final MatchesAdapterOnClickHandler clickHandler;
 
     private List<Match> matches;
+
+    private int selectedPosition = -1;
 
     public MatchesAdapter(MatchesAdapterOnClickHandler clickHandler) {
         this.clickHandler = clickHandler;
@@ -69,25 +71,21 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
                 holder.homeScore.setText(matches.get(position).getHomeScore().toString());
                 holder.awayScore.setText(matches.get(position).getAwayScore().toString());
                 break;
+
             case VIEW_TYPE_UNPLAYED:
                 Date date = matches.get(position).getDatetime();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy\nkk:mm");
+                SimpleDateFormat sdf = new SimpleDateFormat("kk:mm - dd/MM/yyyy");
                 holder.date.setText(sdf.format(date));
+                holder.accomodation.setText(matches.get(position).getAccomodation());
+
+                holder.clickedOptionsView.setVisibility((position == selectedPosition)?View.VISIBLE:View.GONE);
 
                 holder.mapsIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        clickHandler.onClick(MatchesAdapterClickType.MAPS, matches.get(position).getGuid());
+                        clickHandler.onClick(MatchesAdapterClickType.MAPS, matches.get(position).getGuid(), matches.get(position).getAccomodation());
                     }
                 });
-
-                holder.dateIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        clickHandler.onClick(MatchesAdapterClickType.DATE, "");
-                    }
-                });
-                break;
         }
     }
 
@@ -104,10 +102,11 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
         Date date = matches.get(position).getDatetime();
         Date now = new Date();
 
-        if (date.after(now))
+        if (date.after(now)) {
             return VIEW_TYPE_UNPLAYED;
-        else
+        } else {
             return VIEW_TYPE_PLAYED;
+        }
     }
 
     /**
@@ -129,7 +128,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
      * a cache of the child views for a forecast item. It's also a convenient place to set an
      * OnClickListener, since it has access to the adapter and the views.
      */
-    public class MatchesAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class MatchesAdapterViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
         final TextView homeTeam;
         final TextView awayTeam;
 
@@ -137,10 +136,12 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
         final TextView awayScore;
         final TextView date;
 
-        final View dateIcon;
+        final View clickedOptionsView;
         final View mapsIcon;
 
-        final View divider;
+        final View dividerScore;
+
+        final TextView accomodation;
 
         public MatchesAdapterViewHolder(View view) {
             super(view);
@@ -152,15 +153,36 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesA
             awayScore = (TextView) view.findViewById(R.id.away_score);
             date = (TextView) view.findViewById(R.id.date);
 
-            divider = view.findViewById(R.id.divider_score);
+            dividerScore = view.findViewById(R.id.divider_score);
 
-            dateIcon = view.findViewById(R.id.date_icon);
-            mapsIcon = view.findViewById(R.id.maps_icon);
+            clickedOptionsView = view.findViewById(R.id.clicked_options);
+
+            mapsIcon = view.findViewById(R.id.open_in_maps);
+
+            accomodation = (TextView) view.findViewById(R.id.accomodation);
+
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+
+            if (getItemViewType() == VIEW_TYPE_PLAYED) {
+                selectedPosition = -1;
+            } else if (selectedPosition == clickedPosition) {
+                selectedPosition = -1;
+                notifyItemChanged(clickedPosition);
+            } else {
+                notifyItemChanged(selectedPosition);
+                notifyItemChanged(clickedPosition);
+                selectedPosition = clickedPosition;
+            }
         }
     }
 
     public interface MatchesAdapterOnClickHandler {
-        void onClick(MatchesAdapterClickType type, String data);
+        void onClick(MatchesAdapterClickType type, String data, String accomodation);
     }
 
     public enum MatchesAdapterClickType {

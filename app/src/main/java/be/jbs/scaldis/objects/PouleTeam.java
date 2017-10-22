@@ -1,4 +1,4 @@
-package com.housesnow.scaldis.objects;
+package be.jbs.scaldis.objects;
 
 /**
  * Created by Sander on 8-10-2017.

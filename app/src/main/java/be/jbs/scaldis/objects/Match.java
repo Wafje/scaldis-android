@@ -1,4 +1,4 @@
-package com.housesnow.scaldis.objects;
+package be.jbs.scaldis.objects;
 
 import android.support.annotation.NonNull;
 
@@ -15,14 +15,16 @@ public class Match implements Comparable<Match> {
     private Integer awayScore;
     private Date datetime;
     private String guid;
+    private String accomodation;
 
-    public Match(Team homeTeam, Team awayTeam, Integer homeScore, Integer awayScore, Date datetime, String guid) {
+    public Match(Team homeTeam, Team awayTeam, Integer homeScore, Integer awayScore, Date datetime, String guid, String accomodation) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeScore = homeScore;
         this.awayScore = awayScore;
         this.datetime = datetime;
         this.guid = guid;
+        this.accomodation = accomodation;
     }
 
     public Team getHomeTeam() {
@@ -48,6 +50,8 @@ public class Match implements Comparable<Match> {
     public String getGuid() {
         return guid;
     }
+
+    public String getAccomodation() { return accomodation; }
 
     @Override
     public int compareTo(@NonNull Match o) {

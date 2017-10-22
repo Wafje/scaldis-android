@@ -1,11 +1,10 @@
-package com.housesnow.scaldis.detail;
+package be.jbs.scaldis.detail.matches;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.housesnow.scaldis.objects.Match;
-import com.housesnow.scaldis.objects.Poule;
-import com.housesnow.scaldis.utilities.QueryUtils;
+import be.jbs.scaldis.objects.Match;
+import be.jbs.scaldis.utilities.QueryUtils;
 
 import java.net.URL;
 import java.util.List;

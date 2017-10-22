@@ -1,12 +1,12 @@
-package com.housesnow.scaldis.utilities;
+package be.jbs.scaldis.utilities;
 
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.housesnow.scaldis.objects.Match;
-import com.housesnow.scaldis.objects.Poule;
-import com.housesnow.scaldis.objects.PouleTeam;
-import com.housesnow.scaldis.objects.Team;
+import be.jbs.scaldis.objects.Match;
+import be.jbs.scaldis.objects.Poule;
+import be.jbs.scaldis.objects.PouleTeam;
+import be.jbs.scaldis.objects.Team;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,16 +31,13 @@ import java.util.List;
 
 public final class QueryUtils {
 
-    /** Tag for the log messages */
-    private static final String LOG_TAG = QueryUtils.class.getSimpleName();
-
     public static String fetchAddressFromMatchGuid(URL requestUrl) {
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(requestUrl);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+
         }
 
         // Extract relevant fields from the JSON response
@@ -75,10 +72,7 @@ public final class QueryUtils {
             address = street + "+" + number + "+" + city;
 
         } catch (JSONException e) {
-            // If an error is thrown when executing any of the above statements in the "try" block,
-            // catch the exception here, so the app doesn't crash. Print a log message
-            // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the team JSON results", e);
+
         }
 
         // Return the list
@@ -92,7 +86,7 @@ public final class QueryUtils {
         try {
             jsonResponse = makeHttpRequest(requestUrl);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Team}s
@@ -133,10 +127,7 @@ public final class QueryUtils {
             }
 
         } catch (JSONException e) {
-            // If an error is thrown when executing any of the above statements in the "try" block,
-            // catch the exception here, so the app doesn't crash. Print a log message
-            // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the team JSON results", e);
+
         }
 
         // Return the list
@@ -149,7 +140,7 @@ public final class QueryUtils {
         try {
             jsonResponse = makeHttpRequest(requestUrl);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Team}s
@@ -164,7 +155,7 @@ public final class QueryUtils {
         try {
             jsonResponse = makeHttpRequest(requestUrl);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Team}s
@@ -265,7 +256,9 @@ public final class QueryUtils {
 
                 String guid = currentMatch.getString("guid");
 
-                String dateTime;
+                String accomodation = currentMatch.getString("accNaam");
+
+                        String dateTime;
                 SimpleDateFormat dateTimeFormat;
 
                 if (time.isEmpty()) {
@@ -298,8 +291,7 @@ public final class QueryUtils {
                 Team awayTeam = new Team(awayTeamName,awayTeamGuid);
 
 
-
-                Match match = new Match(homeTeam, awayTeam, homeScore, awayScore, dateObj, guid);
+                Match match = new Match(homeTeam, awayTeam, homeScore, awayScore, dateObj, guid, accomodation);
 
                 matches.add(match);
             }
@@ -349,10 +341,10 @@ public final class QueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the team JSON results.", e);
+
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();

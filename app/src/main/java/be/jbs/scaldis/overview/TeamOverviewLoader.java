@@ -1,10 +1,10 @@
-package com.housesnow.scaldis.overview;
+package be.jbs.scaldis.overview;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 
-import com.housesnow.scaldis.objects.Team;
-import com.housesnow.scaldis.utilities.QueryUtils;
+import be.jbs.scaldis.objects.Team;
+import be.jbs.scaldis.utilities.QueryUtils;
 
 import java.net.URL;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.housesnow.scaldis.data;
+package be.jbs.scaldis.data;
 
 import android.provider.BaseColumns;
 

@@ -1,4 +1,4 @@
-package com.housesnow.scaldis.utilities;
+package be.jbs.scaldis.utilities;
 
 import android.net.Uri;
 
@@ -44,8 +44,10 @@ public final class NetworkUtils {
     }
 
     public static URL getUrlTeamDetail(String guid) {
+        String teamguid = guid.replaceAll(" ","+");
+
         Uri uri = Uri.parse(TEAM_DETAIL_URL).buildUpon()
-                .appendQueryParameter(PARAM_TEAM_GUID, guid)
+                .appendQueryParameter(PARAM_TEAM_GUID, teamguid)
                 .build();
 
         try {
@@ -58,8 +60,10 @@ public final class NetworkUtils {
     }
 
     public static URL getUrlMatchesByGuid(String guid) {
+        String teamguid = guid.replaceAll(" ","+");
+
         Uri uri = Uri.parse(TEAM_MATCHES_URL).buildUpon()
-                .appendQueryParameter(PARAM_TEAM_GUID, guid)
+                .appendQueryParameter(PARAM_TEAM_GUID, teamguid)
                 .build();
 
         try {

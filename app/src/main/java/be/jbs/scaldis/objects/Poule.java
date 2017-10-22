@@ -1,4 +1,4 @@
-package com.housesnow.scaldis.objects;
+package be.jbs.scaldis.objects;
 
 import java.util.List;
 

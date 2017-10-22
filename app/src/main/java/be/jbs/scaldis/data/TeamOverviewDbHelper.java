@@ -1,10 +1,10 @@
-package com.housesnow.scaldis.data;
+package be.jbs.scaldis.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.housesnow.scaldis.data.TeamOverviewContract.TeamOverviewEntry;
+import be.jbs.scaldis.data.TeamOverviewContract.TeamOverviewEntry;
 
 /**
  * Created by Sander on 5-10-2017.
